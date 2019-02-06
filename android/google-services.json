@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "60111536025",
+    "firebase_url": "https://social-lens-3a3d5.firebaseio.com",
+    "project_id": "social-lens-3a3d5",
+    "storage_bucket": "social-lens-3a3d5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:60111536025:android:f64fb626189f540e",
+        "android_client_info": {
+          "package_name": "com.crowdbotics.sociallens"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "60111536025-fbrqvaviapovsp3fg933ff7o14d0234f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA8ZAYcgTvB8Y7V6T_GCnJm_HRE2B6Ltis"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
