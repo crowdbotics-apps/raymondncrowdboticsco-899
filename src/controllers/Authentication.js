@@ -8,7 +8,14 @@ const currentUser = auth.currentUser;
 const signup = async payload => {
   try {
     let user = await auth.createUserWithEmailAndPassword(payload.email, payload.password);
-    user.user.sendEmailVerification();
+    await user.user.sendEmailVerification({
+      ios: {
+        bundleId: 'com.crowdbotics.sociallens'
+      },
+      android: {
+        packageName: 'com.crowdbotics.sociallens'
+      }
+    });
     await user.user.updateProfile({
       displayName: payload.name
     });
@@ -30,6 +37,21 @@ const signup = async payload => {
   }
 };
 
+const sendEmailVerification = async () => {
+  try {
+    auth.currentUser.sendEmailVerification({
+      ios: {
+        bundleId: 'com.crowdbotics.sociallens'
+      },
+      android: {
+        packageName: 'com.crowdbotics.sociallens'
+      }
+    });
+  } catch (error) {
+    throw error;
+  }
+};
+
 const login = async payload => {
   try {
     let { email, password } = payload;
@@ -40,4 +62,4 @@ const login = async payload => {
   }
 };
 
-export default { currentUser, signup, login };
+export default { currentUser, signup, login, sendEmailVerification };

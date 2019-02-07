@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { CheckBox } from 'react-native-elements';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
-import { Button } from 'app/components';
+import { AppContext, Button } from 'app/components';
 import { AuthController } from 'app/controllers';
 import { alert } from 'app/utils/Alert';
 
@@ -24,7 +24,8 @@ class SignupScreen extends React.Component {
       email: '',
       password: '',
       confirmpswd: '',
-      agreeTerms: false
+      agreeTerms: false,
+      step: 1
     };
   }
 
@@ -75,19 +76,39 @@ class SignupScreen extends React.Component {
       return;
     }
     let { name, email, password } = this.state;
-    let user = await AuthController.signup({
-      name,
-      email,
-      password
-    });
-    console.log(user);
+    try {
+      this.context.showLoading();
+      let user = await AuthController.signup({
+        name,
+        email,
+        password
+      });
+      this.context.hideLoading();
+      this.setState({
+        step: 2
+      });
+    } catch (error) {
+      this.context.hideLoading();
+      alert(error.message);
+    }
   };
 
   goToLogin = () => {
     this.props.navigation.goBack();
   };
 
-  render() {
+  resendVerification = async () => {
+    try {
+      this.context.showLoading();
+      await AuthController.sendEmailVerification();
+      this.context.hideLoading();
+    } catch (error) {
+      this.context.hideLoading();
+      alert(error.message);
+    }
+  };
+
+  renderSignup = () => {
     return (
       <KeyboardAwareScrollView contentContainerStyle={styles.container}>
         <View style={styles.container}>
@@ -128,7 +149,7 @@ class SignupScreen extends React.Component {
               title="Agree to Terms and Conditions"
               textStyle={styles.terms}
               checked={this.state.agreeTerms}
-              onPress={this.agreeTerms}
+              onIconPress={this.agreeTerms}
             />
             <Button
               disabled={!this.state.agreeTerms}
@@ -145,8 +166,38 @@ class SignupScreen extends React.Component {
         </View>
       </KeyboardAwareScrollView>
     );
+  };
+
+  renderVerifcation = () => {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.title}> Please verify your email first.</Text>
+        <Button
+          containerStyle={styles.resendBtn}
+          textStyle={styles.resend}
+          text="Resend verification email"
+          onPress={this.resendVerification}
+        />
+        <Button
+          containerStyle={styles.signupBtn}
+          textStyle={styles.signup}
+          text="Log In"
+          onPress={this.goToLogin}
+        />
+      </View>
+    );
+  };
+
+  render() {
+    if (this.state.step === 1) {
+      return this.renderSignup();
+    } else {
+      return this.renderVerifcation();
+    }
   }
 }
+
+SignupScreen.contextType = AppContext;
 
 SignupScreen.propTypes = {
   navigation: PropTypes.object

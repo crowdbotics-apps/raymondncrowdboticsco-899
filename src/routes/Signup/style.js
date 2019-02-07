@@ -59,5 +59,18 @@ export default StyleSheet.create({
   login: {
     fontSize: 18,
     fontWeight: '600'
+  },
+  title: {
+    marginTop: 100,
+    fontSize: 18,
+    fontWeight: '600'
+  },
+  resendBtn: {
+    marginTop: 20,
+    marginBottom: 20
+  },
+  resend: {
+    fontSize: 16,
+    textDecorationLine: 'underline'
   }
 });

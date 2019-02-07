@@ -34,10 +34,16 @@ class LoginScreen extends React.Component {
     let { email, password } = this.state;
     try {
       this.context.showLoading();
-      await AuthController.login({
+      let user = await AuthController.login({
         email,
         password
       });
+      if (!user.user.emailVerified) {
+        await AuthController.sendEmailVerification();
+        alert('Verification email is sent. Please verify email first.');
+      } else {
+        console.log(user);
+      }
       this.context.hideLoading();
     } catch (error) {
       this.context.hideLoading();
