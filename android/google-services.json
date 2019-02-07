@@ -8,9 +8,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:60111536025:android:f64fb626189f540e",
+        "mobilesdk_app_id": "1:60111536025:android:bdd589f1c9cd005c",
         "android_client_info": {
-          "package_name": "com.crowdbotics.sociallens"
+          "package_name": "com.crowdbotics.sociallensresearch"
         }
       },
       "oauth_client": [

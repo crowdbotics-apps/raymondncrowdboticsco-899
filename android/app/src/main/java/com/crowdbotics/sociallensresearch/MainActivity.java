@@ -1,4 +1,4 @@
-package com.crowdbotics.sociallens;
+package com.crowdbotics.sociallensresearch;
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;

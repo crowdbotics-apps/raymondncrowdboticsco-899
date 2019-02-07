@@ -1,4 +1,4 @@
-package com.crowdbotics.sociallens;
+package com.crowdbotics.sociallensresearch;
 
 import android.annotation.SuppressLint;
 import android.app.Application;

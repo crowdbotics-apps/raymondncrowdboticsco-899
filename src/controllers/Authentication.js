@@ -10,10 +10,10 @@ const signup = async payload => {
     let user = await auth.createUserWithEmailAndPassword(payload.email, payload.password);
     await user.user.sendEmailVerification({
       ios: {
-        bundleId: 'com.crowdbotics.sociallens'
+        bundleId: 'com.crowdbotics.sociallensresearch'
       },
       android: {
-        packageName: 'com.crowdbotics.sociallens'
+        packageName: 'com.crowdbotics.sociallensresearch'
       }
     });
     await user.user.updateProfile({
@@ -41,10 +41,10 @@ const sendEmailVerification = async () => {
   try {
     auth.currentUser.sendEmailVerification({
       ios: {
-        bundleId: 'com.crowdbotics.sociallens'
+        bundleId: 'com.crowdbotics.sociallensresearch'
       },
       android: {
-        packageName: 'com.crowdbotics.sociallens'
+        packageName: 'com.crowdbotics.sociallensresearch'
       }
     });
   } catch (error) {

@@ -5,7 +5,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 
 import { AuthController } from 'app/controllers';
 import { AppContext, Button } from 'app/components';
-import { alert } from 'app/utils/Alert';
+import { alert, success } from 'app/utils/Alert';
 
 import styles from './style';
 import LogoIcon from 'app/assets/images/SLR-Logo.png';
@@ -43,6 +43,7 @@ class LoginScreen extends React.Component {
         alert('Verification email is sent. Please verify email first.');
       } else {
         console.log(user);
+        success('User logged in successfully.');
       }
       this.context.hideLoading();
     } catch (error) {
