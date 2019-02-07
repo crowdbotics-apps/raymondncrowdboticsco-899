@@ -28,16 +28,27 @@ export default StyleSheet.create({
     marginBottom: 20
   },
   termsContainer: {
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  checkbox: {
     backgroundColor: '#fff',
     borderWidth: 0,
-    marginTop: 20
+    marginRight: 5,
+    padding: 0
   },
   terms: {
     fontSize: 16,
     fontWeight: 'normal'
   },
+  termsBtnText: {
+    fontSize: 16,
+    fontWeight: '600',
+    textDecorationLine: 'underline'
+  },
   signupBtn: {
-    marginTop: 10,
+    marginTop: 20,
+    marginBottom: 10,
     width: 150,
     height: 50,
     borderRadius: 25,

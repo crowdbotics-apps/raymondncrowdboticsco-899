@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Image, TextInput, Text } from 'react-native';
+import { View, Image, TextInput, Text, Linking } from 'react-native';
 import PropTypes from 'prop-types';
 import { CheckBox } from 'react-native-elements';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -108,6 +108,19 @@ class SignupScreen extends React.Component {
     }
   };
 
+  termsPressed = () => {
+    let url = 'https://www.sociallensresearch.com/privacy-policy';
+    Linking.canOpenURL(url)
+      .then(supported => {
+        if (!supported) {
+          console.log('Can\'t handle url: ' + url);
+        } else {
+          return Linking.openURL(url);
+        }
+      })
+      .catch(err => console.error('An error occurred', err));
+  };
+
   renderSignup = () => {
     return (
       <KeyboardAwareScrollView contentContainerStyle={styles.container}>
@@ -144,13 +157,19 @@ class SignupScreen extends React.Component {
               onChangeText={value => this.inputChanged('confirmpswd', value)}
               secureTextEntry={true}
             />
-            <CheckBox
-              containerStyle={styles.termsContainer}
-              title="Agree to Terms and Conditions"
-              textStyle={styles.terms}
-              checked={this.state.agreeTerms}
-              onIconPress={this.agreeTerms}
-            />
+            <View style={styles.termsContainer}>
+              <CheckBox
+                containerStyle={styles.checkbox}
+                checked={this.state.agreeTerms}
+                onIconPress={this.agreeTerms}
+              />
+              <Text style={styles.terms}>{'Agree to '}</Text>
+              <Button
+                textStyle={styles.termsBtnText}
+                text="Terms and Conditions"
+                onPress={this.termsPressed}
+              />
+            </View>
             <Button
               disabled={!this.state.agreeTerms}
               containerStyle={styles.signupBtn}
