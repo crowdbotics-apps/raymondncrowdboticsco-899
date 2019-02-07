@@ -1,12 +1,20 @@
 import React, { Component } from 'react';
 import { View, ActivityIndicator, StyleSheet } from 'react-native';
 
+import AppContext from './../AppContext';
+
 export default class LoadingView extends Component {
   render() {
     return (
-      <View style={styles.container}>
-        <ActivityIndicator size="large" color="white" animating={true} />
-      </View>
+      <AppContext.Consumer>
+        {({ loading }) =>
+          loading && (
+            <View style={styles.container}>
+              <ActivityIndicator size="large" color="white" animating={true} />
+            </View>
+          )
+        }
+      </AppContext.Consumer>
     );
   }
 }

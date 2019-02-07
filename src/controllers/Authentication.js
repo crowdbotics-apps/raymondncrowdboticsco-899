@@ -30,4 +30,14 @@ const signup = async payload => {
   }
 };
 
-export default { currentUser, signup };
+const login = async payload => {
+  try {
+    let { email, password } = payload;
+    let user = await auth.signInWithEmailAndPassword(email, password);
+    return user;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export default { currentUser, signup, login };
