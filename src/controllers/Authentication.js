@@ -26,7 +26,8 @@ const signup = async payload => {
       if (!doc.exists) {
         transaction.set(ref, {
           id: user.user.uid,
-          ...payload
+          name: payload.name,
+          email: payload.email
         });
       }
       return user;
