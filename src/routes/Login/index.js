@@ -5,7 +5,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 
 import { AuthController } from 'app/controllers';
 import { AppContext, Button } from 'app/components';
-import { alert, success } from 'app/utils/Alert';
+import { alert } from 'app/utils/Alert';
 
 import styles from './style';
 import LogoIcon from 'app/assets/images/SLR-Logo.png';
@@ -15,8 +15,8 @@ class LoginScreen extends React.Component {
     super(props);
 
     this.state = {
-      email: '',
-      password: ''
+      email: 'raymond.n@crowdbotics.com',
+      password: '123456'
     };
   }
 
@@ -28,6 +28,10 @@ class LoginScreen extends React.Component {
 
   goToSignUp = () => {
     this.props.navigation.navigate('signup');
+  };
+
+  goToForgotpswd = () => {
+    this.props.navigation.navigate('forgotpassword');
   };
 
   login = async () => {
@@ -42,8 +46,7 @@ class LoginScreen extends React.Component {
         await AuthController.sendEmailVerification();
         alert('Verification email is sent. Please verify email first.');
       } else {
-        console.log(user);
-        success('User logged in successfully.');
+        this.props.navigation.navigate('main');
       }
       this.context.hideLoading();
     } catch (error) {
@@ -78,6 +81,12 @@ class LoginScreen extends React.Component {
               textStyle={styles.login}
               text="Log In"
               onPress={this.login}
+            />
+            <Button
+              containerStyle={styles.forgotpswdBtn}
+              textStyle={styles.forgotpswd}
+              text="Forgot password?"
+              onPress={this.goToForgotpswd}
             />
             <View style={styles.signupContainer}>
               <Text style={styles.description}>Do not have an account? </Text>

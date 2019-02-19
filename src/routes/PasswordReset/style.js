@@ -14,7 +14,7 @@ export default StyleSheet.create({
   content: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center'
+    paddingTop: 100
   },
   input: {
     width: dm.width * 0.8,
@@ -27,36 +27,16 @@ export default StyleSheet.create({
     fontSize: 16,
     marginBottom: 20
   },
-  loginBtn: {
+  resetBtn: {
     marginTop: 50,
-    width: 150,
+    width: 200,
     height: 50,
     borderRadius: 25,
     backgroundColor: '#81A8D2'
   },
-  login: {
+  reset: {
     fontSize: 18,
     fontWeight: '600',
     color: '#fff'
-  },
-  forgotpswdBtn: {
-    marginTop: 20
-  },
-  forgotpswd: {
-    fontSize: 16,
-    fontWeight: '600',
-    textDecorationLine: 'underline'
-  },
-  signupContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 30
-  },
-  description: {
-    fontSize: 16
-  },
-  signup: {
-    fontSize: 18,
-    fontWeight: '600'
   }
 });

@@ -3,8 +3,6 @@ import firebase from 'react-native-firebase';
 const auth = firebase.auth();
 const store = firebase.firestore();
 
-const currentUser = auth.currentUser;
-
 const signup = async payload => {
   try {
     let user = await auth.createUserWithEmailAndPassword(payload.email, payload.password);
@@ -63,4 +61,45 @@ const login = async payload => {
   }
 };
 
-export default { currentUser, signup, login, sendEmailVerification };
+const logout = async () => {
+  try {
+    await auth.signOut();
+  } catch (error) {
+    throw error;
+  }
+};
+
+const updateUser = async ({ displayName, password }) => {
+  try {
+    await auth.currentUser.updateProfile({
+      displayName: displayName
+    });
+    if (password) {
+      await auth.currentUser.updatePassword(password);
+    }
+
+    let ref = store.collection('users').doc(auth.currentUser.uid);
+    await ref.update({
+      name: displayName
+    });
+  } catch (error) {
+    throw error;
+  }
+};
+
+const forgotPassword = async email => {
+  try {
+    await auth.sendPasswordResetEmail(email);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export default {
+  signup,
+  login,
+  logout,
+  updateUser,
+  sendEmailVerification,
+  forgotPassword
+};
