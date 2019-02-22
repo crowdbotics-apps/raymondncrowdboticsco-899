@@ -1,3 +1,4 @@
 import AuthController from './Authentication';
+import CampaignController from './Campaign';
 
-export { AuthController };
+export { AuthController, CampaignController };

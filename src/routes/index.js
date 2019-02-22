@@ -13,9 +13,10 @@ import LoadingScreen from './Loading';
 import LoginScreen from './Login';
 import ForgotPasswordScreen from './PasswordReset';
 import SignupScreen from './Signup';
-import ContestScreen from './Contest';
-import RewardScreen from './Reward';
 import ProfileScreen from './Profile';
+import ContestScreen from './Contest';
+import ContestDetailsScreen from './ContestDetails';
+import RewardScreen from './Reward';
 
 import { DrawerMenu } from './../components';
 
@@ -81,7 +82,8 @@ const MainTabNavigator = createBottomTabNavigator(
 const MainNavigator = createDrawerNavigator(
   {
     home: MainTabNavigator,
-    profile: ProfileScreen
+    profile: ProfileScreen,
+    contestdetails: ContestDetailsScreen
   },
   {
     drawerWidth: dm.width * 0.75,

@@ -11,15 +11,15 @@ class Navbar extends Component {
       <View style={styles.container}>
         <View style={styles.leftContainer}>
           {left && (
-            <TouchableOpacity onPress={leftHandler}>
-              <Ionicons name={left} size={24} />
+            <TouchableOpacity style={styles.btn} onPress={leftHandler}>
+              <Ionicons name={left} style={styles.left} size={24} />
             </TouchableOpacity>
           )}
         </View>
         <Text style={styles.title}>{title}</Text>
         <View style={styles.rightContainer}>
           {right && (
-            <TouchableOpacity onPress={rightHandler}>
+            <TouchableOpacity style={styles.btn} onPress={rightHandler}>
               <Text style={styles.right}>{right}</Text>
             </TouchableOpacity>
           )}
@@ -37,11 +37,17 @@ let styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 20
+    paddingHorizontal: 15
   },
   leftContainer: {
-    width: 40,
+    width: 60,
     alignItems: 'flex-start'
+  },
+  btn: {
+    padding: 5
+  },
+  left: {
+    fontSize: 22
   },
   title: {
     flex: 1,
@@ -50,7 +56,7 @@ let styles = StyleSheet.create({
     textAlign: 'center'
   },
   rightContainer: {
-    width: 40,
+    width: 60,
     alignItems: 'flex-end'
   },
   right: {
