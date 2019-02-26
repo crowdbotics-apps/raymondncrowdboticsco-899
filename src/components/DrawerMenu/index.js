@@ -37,13 +37,15 @@ let styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 50,
-    paddingLeft: 20
+    paddingLeft: 20,
+    backgroundColor: '#81A8D2'
   },
   menuItem: {
     marginBottom: 20
   },
   menuText: {
-    fontSize: 18
+    fontSize: 18,
+    color: '#fff'
   }
 });
 

@@ -30,8 +30,11 @@ class ContestDetailsScreen extends React.Component {
   async componentDidMount() {
     let campaignId = this.props.navigation.state.params.campaignId;
     let data = await CampaignController.getCampaignById(campaignId);
-    let answers = await AnswerController.getAnswerByUserCampaign(campaignId);
-    if (!answers) {
+    let answersData = await AnswerController.getAnswerByUserCampaign(campaignId);
+    let answers = [];
+    if (answersData) {
+      answers = answersData['answers'];
+    } else {
       answers = [];
       data.questions.map(question => {
         switch (question.type) {

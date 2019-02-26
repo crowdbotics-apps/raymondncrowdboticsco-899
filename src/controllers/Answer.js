@@ -6,7 +6,22 @@ const auth = firebase.auth();
 const updateAnswers = async (campaignId, answers) => {
   const collection = store.collection('answers');
   let answerRef = collection.doc(`${campaignId}-${auth.currentUser.uid}`);
-  answerRef.set(answers);
+  let answerDoc = await answerRef.get();
+
+  let data = {};
+  answers.map((item, index) => {
+    data[`${index}`] = item;
+  });
+  if (answerDoc.exists) {
+    answerRef.update({
+      answers: data
+    });
+  } else {
+    answerRef.set({
+      answers: data,
+      reward: 0
+    });
+  }
 };
 
 const getAnswerByUserCampaign = async campaignId => {

@@ -33,34 +33,37 @@ class ContestScreen extends Component {
   }
 
   reload = async () => {
+    this.context.showLoading();
     let tasks = this.state.campaigns.map(campaign => {
       return AnswerController.getAnswerByUserCampaign(campaign.id);
     });
-    let answers = await Promise.all(tasks);
+    let answersData = await Promise.all(tasks);
 
     // calculating completeness for campaign answers
     let completeness = [];
-    answers.map(answer => {
-      if (!answer) {
+    answersData.map(item => {
+      if (!item) {
         completeness.push(0);
         return;
       }
+      let answers = item.answers;
       let count = 0;
-      Object.keys(answer).forEach(key => {
-        if (answer[key] === '') {
+      Object.keys(answers).forEach(key => {
+        if (answers[key] === '') {
           return;
         }
-        if (answer[key] === -1) {
+        if (answers[key] === -1) {
           return;
         }
-        if (answer[key].length === 0) {
+        if (answers[key].length === 0) {
           return;
         }
         count++;
       });
-      completeness.push(count / Object.keys(answer).length);
+      completeness.push(count / Object.keys(answers).length);
     });
-    this.setState({ answers, completeness });
+    this.setState({ completeness });
+    this.context.hideLoading();
   };
 
   leftHandler = () => {
@@ -76,7 +79,7 @@ class ContestScreen extends Component {
   };
 
   renderCampaign = ({ item, index }) => {
-    if (this.state.selectedTab === 0 && !this.state.completeness[index]) return;
+    if (this.state.selectedTab === 0 && this.state.completeness[index]) return;
     return (
       <View style={styles.item}>
         <Text style={styles.item_name}>{item.name}</Text>
