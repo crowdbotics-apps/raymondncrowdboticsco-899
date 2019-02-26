@@ -8,7 +8,7 @@ import FastImage from 'react-native-fast-image';
 let dm = Dimensions.get('screen');
 
 import { AppContext, Navbar, Button } from 'app/components';
-import { CampaignController } from 'app/controllers';
+import { CampaignController, AnswerController } from 'app/controllers';
 
 import styles from './style';
 
@@ -20,14 +20,48 @@ class ContestScreen extends Component {
 
     this.state = {
       selectedTab: 0,
-      campaigns: []
+      campaigns: [],
+      completeness: []
     };
   }
 
   async componentDidMount() {
     let campaigns = await CampaignController.getCampaigns();
-    this.setState({ campaigns });
+    this.setState({ campaigns }, async () => {
+      await this.reload();
+    });
   }
+
+  reload = async () => {
+    let tasks = this.state.campaigns.map(campaign => {
+      return AnswerController.getAnswerByUserCampaign(campaign.id);
+    });
+    let answers = await Promise.all(tasks);
+
+    // calculating completeness for campaign answers
+    let completeness = [];
+    answers.map(answer => {
+      if (!answer) {
+        completeness.push(0);
+        return;
+      }
+      let count = 0;
+      Object.keys(answer).forEach(key => {
+        if (answer[key] === '') {
+          return;
+        }
+        if (answer[key] === -1) {
+          return;
+        }
+        if (answer[key].length === 0) {
+          return;
+        }
+        count++;
+      });
+      completeness.push(count / Object.keys(answer).length);
+    });
+    this.setState({ answers, completeness });
+  };
 
   leftHandler = () => {
     this.props.navigation.toggleDrawer();
@@ -38,10 +72,11 @@ class ContestScreen extends Component {
   };
 
   handleCampaignPress = campaignId => () => {
-    this.props.navigation.navigate('contestdetails', { campaignId });
+    this.props.navigation.navigate('contestdetails', { campaignId, reload: this.reload });
   };
 
   renderCampaign = ({ item, index }) => {
+    if (this.state.selectedTab === 0 && !this.state.completeness[index]) return;
     return (
       <View style={styles.item}>
         <Text style={styles.item_name}>{item.name}</Text>
@@ -55,7 +90,13 @@ class ContestScreen extends Component {
         ) : (
           <Image source={NoLogoImage} style={styles.item_logo} resizeMode="cover" />
         )}
-        <Progress.Bar progress={0.3} width={dm.width / 2 - 30} height={10} />
+        <Progress.Bar
+          progress={this.state.completeness[index]}
+          width={dm.width / 2 - 30}
+          height={10}
+          color="#81A8D2"
+          borderColor="#81A8D2"
+        />
         <Button
           containerStyle={styles.item_button}
           text="Proceed"
@@ -84,7 +125,7 @@ class ContestScreen extends Component {
           data={this.state.campaigns}
           keyExtractor={item => item.id}
           renderItem={this.renderCampaign}
-          extraData={this.state.campaigns}
+          extraData={this.state}
         />
       </View>
     );

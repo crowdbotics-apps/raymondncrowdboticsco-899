@@ -13,7 +13,7 @@ export default StyleSheet.create({
     padding: 20
   },
   title: {
-    fontSize: 24,
+    fontSize: 32,
     fontWeight: '600',
     alignSelf: 'center'
   },
@@ -51,22 +51,22 @@ export default StyleSheet.create({
     flex: 1
   },
   questionItem: {
-    marginBottom: 20
+    marginVertical: 20
   },
   qLabel: {
-    fontSize: 20,
+    fontSize: 24,
     fontWeight: '600',
     color: '#555'
   },
   qImage: {
     width: dm.width - 40,
     height: 200,
-    marginTop: 10
+    marginVertical: 10
   },
   qVideoContainer: {
     width: dm.width - 40,
     height: 200,
-    marginTop: 10
+    marginVertical: 10
   },
   qVideo: {
     width: dm.width - 40,
@@ -85,5 +85,30 @@ export default StyleSheet.create({
   qVideoPlayBtn: {
     fontSize: 50,
     color: '#fff'
+  },
+  qQuestion: {
+    fontSize: 18
+  },
+  qQuestionDetails: {
+    fontWeight: '600'
+  },
+  qAnswerInput: {
+    alignSelf: 'stretch',
+    height: 40,
+    paddingHorizontal: 10,
+    borderRadius: 3,
+    borderWidth: StyleSheet.hairlineWidth,
+    fontSize: 16,
+    lineHeight: 40,
+    marginVertical: 5
+  },
+  qRadio: {
+    marginVertical: 5
+  },
+  qRadioBtn: {
+    marginBottom: 5
+  },
+  qCheck: {
+    marginVertical: 5
   }
 });

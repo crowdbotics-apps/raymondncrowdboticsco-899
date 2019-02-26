@@ -1,13 +1,14 @@
 import React from 'react';
-import { View, ScrollView, Text, TouchableOpacity } from 'react-native';
+import { View, ScrollView, Text, TouchableOpacity, TextInput } from 'react-native';
 import PropTypes from 'prop-types';
 import FastImage from 'react-native-fast-image';
 import Video from 'react-native-video';
-import moment from 'moment';
+import { CheckBox } from 'react-native-elements';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import moment from 'moment';
 
-import { AppContext, Navbar, Button } from 'app/components';
-import { CampaignController } from 'app/controllers';
+import { AppContext, Navbar } from 'app/components';
+import { CampaignController, AnswerController } from 'app/controllers';
 
 import styles from './style';
 
@@ -19,7 +20,8 @@ class ContestDetailsScreen extends React.Component {
 
     this.state = {
       data: null,
-      mediaStates: []
+      mediaStates: [],
+      answers: []
     };
 
     this.players = {};
@@ -28,9 +30,30 @@ class ContestDetailsScreen extends React.Component {
   async componentDidMount() {
     let campaignId = this.props.navigation.state.params.campaignId;
     let data = await CampaignController.getCampaignById(campaignId);
+    let answers = await AnswerController.getAnswerByUserCampaign(campaignId);
+    if (!answers) {
+      answers = [];
+      data.questions.map(question => {
+        switch (question.type) {
+        case 0:
+          answers.push('');
+          break;
+        case 1:
+          answers.push(-1);
+          break;
+        case 2:
+          answers.push([]);
+          break;
+        default:
+          break;
+        }
+        return;
+      });
+    }
     let mediaStates = Array(data.questions.length).fill(true);
     this.setState({
       data,
+      answers,
       mediaStates
     });
   }
@@ -39,7 +62,14 @@ class ContestDetailsScreen extends React.Component {
     this.props.navigation.goBack();
   };
 
-  rightHandler = () => {};
+  rightHandler = async () => {
+    await AnswerController.updateAnswers(
+      this.props.navigation.state.params.campaignId,
+      this.state.answers
+    );
+    await this.props.navigation.state.params.reload();
+    this.props.navigation.goBack();
+  };
 
   playVideo = index => () => {
     let { mediaStates } = this.state;
@@ -53,6 +83,23 @@ class ContestDetailsScreen extends React.Component {
     let { mediaStates } = this.state;
     mediaStates[index] = true;
     this.setState({ mediaStates });
+  };
+
+  handleRadioClick = (qIndex, radioIndex) => () => {
+    let { answers } = this.state;
+    answers[qIndex] = radioIndex;
+    this.setState({ answers });
+  };
+
+  handleCheckClick = (qIndex, checkIndex) => () => {
+    let { answers } = this.state;
+    let index = answers[qIndex].findIndex(item => item === checkIndex);
+    if (index === -1) {
+      answers[qIndex].push(checkIndex);
+    } else {
+      answers[qIndex].splice(index, 1);
+    }
+    this.setState({ answers });
   };
 
   renderQuestion = (question, index) => {
@@ -82,6 +129,45 @@ class ContestDetailsScreen extends React.Component {
               </View>
             </View>
           ))}
+        <Text style={styles.qQuestion}>
+          Question: <Text style={styles.qQuestionDetails}>{question.question}</Text>
+        </Text>
+        {question.type === 0 && (
+          <TextInput
+            style={styles.qAnswerInput}
+            placeholder="Type your answer here"
+            vallue={this.state.answers[index]}
+          />
+        )}
+
+        {question.type === 1 && (
+          <View style={styles.qRadio}>
+            {question.answers.map((answer, answerIndex) => (
+              <CheckBox
+                key={answerIndex}
+                title={answer}
+                checkedIcon="dot-circle-o"
+                uncheckedIcon="circle-o"
+                checked={answerIndex === this.state.answers[index]}
+                onPress={this.handleRadioClick(index, answerIndex)}
+                containerStyle={styles.qRadio}
+              />
+            ))}
+          </View>
+        )}
+        {question.type === 2 && (
+          <View style={styles.qCheck}>
+            {question.answers.map((answer, checkIndex) => (
+              <CheckBox
+                key={checkIndex}
+                title={answer}
+                checked={this.state.answers[index].includes(checkIndex)}
+                onPress={this.handleCheckClick(index, checkIndex)}
+                containerStyle={styles.qCheck}
+              />
+            ))}
+          </View>
+        )}
       </View>
     );
   };
