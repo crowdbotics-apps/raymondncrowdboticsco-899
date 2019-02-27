@@ -7,9 +7,14 @@ import { alert } from 'app/utils/Alert';
 
 class DrawerMenu extends Component {
   menuItemPressed = index => async () => {
-    if (index === 0) {
+    switch(index) {
+    case 0:
       this.props.navigation.navigate('profile');
-    } else {
+      break;
+    case 1:
+      this.props.navigation.navigate('help');
+      break;
+    default: 
       try {
         await AuthController.logout();
         this.props.navigation.navigate('auth');
@@ -26,6 +31,9 @@ class DrawerMenu extends Component {
           <Text style={styles.menuText}> Profile </Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.menuItem} onPress={this.menuItemPressed(1)}>
+          <Text style={styles.menuText}> Help </Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.menuItem} onPress={this.menuItemPressed(2)}>
           <Text style={styles.menuText}> Log Out </Text>
         </TouchableOpacity>
       </View>

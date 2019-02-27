@@ -14,6 +14,7 @@ import LoginScreen from './Login';
 import ForgotPasswordScreen from './PasswordReset';
 import SignupScreen from './Signup';
 import ProfileScreen from './Profile';
+import HelpScreen from './Help';
 import ContestScreen from './Contest';
 import ContestDetailsScreen from './ContestDetails';
 import RewardScreen from './Reward';
@@ -83,6 +84,7 @@ const MainNavigator = createDrawerNavigator(
   {
     home: MainTabNavigator,
     profile: ProfileScreen,
+    help: HelpScreen,
     contestdetails: ContestDetailsScreen
   },
   {
