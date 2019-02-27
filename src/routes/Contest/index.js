@@ -21,6 +21,7 @@ class ContestScreen extends Component {
     this.state = {
       selectedTab: 0,
       campaigns: [],
+      answers: [],
       completeness: []
     };
   }
@@ -62,7 +63,7 @@ class ContestScreen extends Component {
       });
       completeness.push(count / Object.keys(answers).length);
     });
-    this.setState({ completeness });
+    this.setState({ completeness, answers: answersData });
     this.context.hideLoading();
   };
 
@@ -74,8 +75,8 @@ class ContestScreen extends Component {
     this.setState({ selectedTab: index });
   };
 
-  handleCampaignPress = campaignId => () => {
-    this.props.navigation.navigate('contestdetails', { campaignId, reload: this.reload });
+  handleCampaignPress = campaign => () => {
+    this.props.navigation.navigate('contestdetails', { campaign, reload: this.reload });
   };
 
   renderCampaign = ({ item, index }) => {
@@ -100,11 +101,22 @@ class ContestScreen extends Component {
           color="#81A8D2"
           borderColor="#81A8D2"
         />
+        <Text style={styles.item_point}>
+          {this.state.answers[index]
+            ? `${this.state.answers[index].reward} / ${item.total_points} pts`
+            : `0 / ${item.total_points} pts`}
+        </Text>
         <Button
           containerStyle={styles.item_button}
-          text="Proceed"
+          text={
+            this.state.answers[index]
+              ? this.state.answers[index].complete
+                ? 'Completed'
+                : 'Proceed'
+              : 'Proceed'
+          }
           textStyle={styles.item_buttontext}
-          onPress={this.handleCampaignPress(item.id)}
+          onPress={this.handleCampaignPress(item)}
         />
       </View>
     );

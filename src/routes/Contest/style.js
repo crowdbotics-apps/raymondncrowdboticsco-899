@@ -21,7 +21,7 @@ export default StyleSheet.create({
   item: {
     width: dm.width / 2 - 15,
     marginHorizontal: 5,
-    height: 250,
+    height: 300,
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 5,
@@ -39,9 +39,13 @@ export default StyleSheet.create({
     borderRadius: 50,
     marginVertical: 10
   },
+  item_point: {
+    marginTop: 10,
+    fontSize: 18
+  },
   item_button: {
     marginTop: 20,
-    width: 100,
+    paddingHorizontal: 20,
     height: 40,
     borderRadius: 25,
     backgroundColor: '#81A8D2'

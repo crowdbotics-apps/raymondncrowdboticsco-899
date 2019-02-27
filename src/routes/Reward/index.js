@@ -18,10 +18,10 @@ class RewardScreen extends Component {
       totalPoints: 0,
       data: []
     };
-  }
 
-  async componentDidMount() {
-    await this.reload();
+    this.props.navigation.addListener('willFocus', async payload => {
+      await this.reload();
+    });
   }
 
   leftHandler = () => {
@@ -39,7 +39,10 @@ class RewardScreen extends Component {
       ...campaign,
       answer: answers[index]
     }));
-    data = data.filter(campaign => campaign.answer);
+    data = data.filter(campaign => {
+      if (!campaign.answer) return false;
+      return campaign.answer.complete;
+    });
     let totalPoints = 0;
     data.map(campaign => {
       totalPoints += campaign.answer.reward;

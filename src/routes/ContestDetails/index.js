@@ -7,7 +7,7 @@ import { CheckBox } from 'react-native-elements';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import moment from 'moment';
 
-import { AppContext, Navbar } from 'app/components';
+import { AppContext, Navbar, Button } from 'app/components';
 import { CampaignController, AnswerController } from 'app/controllers';
 
 import styles from './style';
@@ -21,31 +21,34 @@ class ContestDetailsScreen extends React.Component {
     this.state = {
       data: null,
       mediaStates: [],
-      answers: []
+      answers: {},
+      complete: false
     };
 
     this.players = {};
   }
 
   async componentDidMount() {
-    let campaignId = this.props.navigation.state.params.campaignId;
+    let campaignId = this.props.navigation.state.params.campaign.id;
     let data = await CampaignController.getCampaignById(campaignId);
     let answersData = await AnswerController.getAnswerByUserCampaign(campaignId);
-    let answers = [];
+    let answers = {},
+      complete = false;
     if (answersData) {
       answers = answersData['answers'];
+      complete = answersData['complete'];
     } else {
-      answers = [];
-      data.questions.map(question => {
+      answers = {};
+      data.questions.map((question, index) => {
         switch (question.type) {
         case 0:
-          answers.push('');
+          answers[`${index}`] = '';
           break;
         case 1:
-          answers.push(-1);
+          answers[`${index}`] = -1;
           break;
         case 2:
-          answers.push([]);
+          answers[`${index}`] = [];
           break;
         default:
           break;
@@ -57,6 +60,7 @@ class ContestDetailsScreen extends React.Component {
     this.setState({
       data,
       answers,
+      complete,
       mediaStates
     });
   }
@@ -65,10 +69,44 @@ class ContestDetailsScreen extends React.Component {
     this.props.navigation.goBack();
   };
 
-  rightHandler = async () => {
+  handleSubmit = async () => {
+    let { data, answers } = this.state;
+    let complete = true;
+    let count = 0;
+    data.questions.map((question, index) => {
+      switch (question.type) {
+      case 0:
+        if (answers[index] === '') {
+          complete = false;
+          return;
+        }
+        break;
+      case 1:
+        if (answers[index] === -1) {
+          complete = false;
+          return;
+        }
+        break;
+      case 2:
+        if (answers[index].length === 0) {
+          complete = false;
+          return;
+        }
+        break;
+      default:
+        break;
+      }
+      count++;
+    });
+    let reward = parseInt(
+      (count / Object.keys(answers).length) *
+        this.props.navigation.state.params.campaign.total_points
+    );
     await AnswerController.updateAnswers(
-      this.props.navigation.state.params.campaignId,
-      this.state.answers
+      this.props.navigation.state.params.campaign.id,
+      answers,
+      reward,
+      complete
     );
     await this.props.navigation.state.params.reload();
     this.props.navigation.goBack();
@@ -105,10 +143,18 @@ class ContestDetailsScreen extends React.Component {
     this.setState({ answers });
   };
 
+  handleOpenQuestionChange = qIndex => value => {
+    let { answers } = this.state;
+    answers[qIndex] = value;
+    this.setState({ answers });
+  };
+
   renderQuestion = (question, index) => {
     return (
       <View key={`${index}`} style={styles.questionItem}>
-        <Text style={styles.qLabel}>Question{index + 1}</Text>
+        <Text style={styles.qLabel}>
+          {index + 1}. <Text style={styles.qQuestionDetails}>{question.question}</Text>
+        </Text>
         {question.media_type &&
           (question.media_type.includes('image/') ? (
             <FastImage
@@ -132,14 +178,12 @@ class ContestDetailsScreen extends React.Component {
               </View>
             </View>
           ))}
-        <Text style={styles.qQuestion}>
-          Question: <Text style={styles.qQuestionDetails}>{question.question}</Text>
-        </Text>
         {question.type === 0 && (
           <TextInput
             style={styles.qAnswerInput}
             placeholder="Type your answer here"
-            vallue={this.state.answers[index]}
+            value={this.state.answers[index]}
+            onChangeText={this.handleOpenQuestionChange(index)}
           />
         )}
 
@@ -180,13 +224,7 @@ class ContestDetailsScreen extends React.Component {
 
     return (
       <View style={styles.container}>
-        <Navbar
-          left="ios-arrow-back"
-          leftHandler={this.leftHandler}
-          title="Answers"
-          right="Update"
-          rightHandler={this.rightHandler}
-        />
+        <Navbar left="ios-arrow-back" leftHandler={this.leftHandler} title="Answers" />
         {data && (
           <ScrollView style={styles.scrollContent}>
             <View style={styles.content}>
@@ -209,6 +247,14 @@ class ContestDetailsScreen extends React.Component {
               <View style={styles.qContainer}>
                 {data.questions.map((question, index) => this.renderQuestion(question, index))}
               </View>
+              {!this.state.complete && (
+                <Button
+                  containerStyle={styles.submitBtn}
+                  textStyle={styles.submit}
+                  text="Submit"
+                  onPress={this.handleSubmit}
+                />
+              )}
             </View>
           </ScrollView>
         )}

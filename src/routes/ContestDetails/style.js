@@ -99,7 +99,6 @@ export default StyleSheet.create({
     borderRadius: 3,
     borderWidth: StyleSheet.hairlineWidth,
     fontSize: 16,
-    lineHeight: 40,
     marginVertical: 5
   },
   qRadio: {
@@ -110,5 +109,19 @@ export default StyleSheet.create({
   },
   qCheck: {
     marginVertical: 5
+  },
+  submitBtn: {
+    marginTop: 25,
+    marginBottom: 25,
+    alignSelf: 'center',
+    width: 150,
+    height: 50,
+    borderRadius: 25,
+    backgroundColor: '#81A8D2'
+  },
+  submit: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#fff'
   }
 });

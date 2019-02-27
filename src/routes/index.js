@@ -84,8 +84,7 @@ const MainNavigator = createDrawerNavigator(
   {
     home: MainTabNavigator,
     profile: ProfileScreen,
-    help: HelpScreen,
-    contestdetails: ContestDetailsScreen
+    help: HelpScreen
   },
   {
     drawerWidth: dm.width * 0.75,
@@ -108,11 +107,22 @@ const MainNavigator = createDrawerNavigator(
   }
 );
 
+const MainStackNavigator = createStackNavigator(
+  {
+    mainroot: MainNavigator,
+    contestdetails: ContestDetailsScreen
+  },
+  {
+    headerMode: 'none',
+    initialRouteName: 'mainroot'
+  }
+);
+
 const AppNavigator = createSwitchNavigator(
   {
     loading: LoadingScreen,
     auth: AuthNavigator,
-    main: MainNavigator
+    main: MainStackNavigator
   },
   {
     initialRouteName: 'loading'

@@ -3,23 +3,22 @@ import firebase from 'react-native-firebase';
 const store = firebase.firestore();
 const auth = firebase.auth();
 
-const updateAnswers = async (campaignId, answers) => {
+const updateAnswers = async (campaignId, answers, reward, complete) => {
   const collection = store.collection('answers');
   let answerRef = collection.doc(`${campaignId}-${auth.currentUser.uid}`);
   let answerDoc = await answerRef.get();
 
-  let data = {};
-  answers.map((item, index) => {
-    data[`${index}`] = item;
-  });
   if (answerDoc.exists) {
     answerRef.update({
-      answers: data
+      answers,
+      reward,
+      complete
     });
   } else {
     answerRef.set({
-      answers: data,
-      reward: 0
+      answers,
+      reward,
+      complete
     });
   }
 };
