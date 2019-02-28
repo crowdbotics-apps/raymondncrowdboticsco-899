@@ -77,8 +77,7 @@ class RewardScreen extends Component {
         <Navbar left="ios-menu" leftHandler={this.leftHandler} title="Rewards" />
         <View style={styles.content}>
           <Text style={styles.title}>
-            <Text style={styles.label}>Total: </Text>
-            {this.state.totalPoints}pts
+            Total: {this.state.totalPoints} points
           </Text>
           <FlatList
             style={styles.list}
