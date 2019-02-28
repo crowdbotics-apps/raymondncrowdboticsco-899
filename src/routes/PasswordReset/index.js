@@ -45,6 +45,10 @@ class PasswordResetScreen extends React.Component {
     }
   };
 
+  goToLogin = () => {
+    this.props.navigation.goBack();
+  };
+  
   render() {
     return (
       <KeyboardAwareScrollView contentContainerStyle={styles.container}>
@@ -64,6 +68,10 @@ class PasswordResetScreen extends React.Component {
               text="Reset password"
               onPress={this.reset}
             />
+            <View style={styles.loginContainer}>
+              <Text style={styles.description}>Already have an account? </Text>
+              <Button textStyle={styles.login} text="Log In" onPress={this.goToLogin} />
+            </View>
           </View>
         </View>
       </KeyboardAwareScrollView>

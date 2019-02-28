@@ -59,7 +59,7 @@ class RewardScreen extends Component {
             <FastImage
               source={{ uri: item.logo }}
               style={styles.logo}
-              resizeMode={FastImage.resizeMode.contain}
+              resizeMode={FastImage.resizeMode.cover}
             />
           ) : (
             <Image source={NoLogoImage} style={styles.logo} resizeMode="cover" />
@@ -76,9 +76,7 @@ class RewardScreen extends Component {
       <View style={styles.container}>
         <Navbar left="ios-menu" leftHandler={this.leftHandler} title="Rewards" />
         <View style={styles.content}>
-          <Text style={styles.title}>
-            Total: {this.state.totalPoints} points
-          </Text>
+          <Text style={styles.title}>Total: {this.state.totalPoints} points</Text>
           <FlatList
             style={styles.list}
             data={this.state.data}

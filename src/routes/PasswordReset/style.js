@@ -38,5 +38,17 @@ export default StyleSheet.create({
     fontSize: 18,
     fontWeight: '600',
     color: '#fff'
+  },
+  loginContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 20
+  },
+  description: {
+    fontSize: 16
+  },
+  login: {
+    fontSize: 18,
+    fontWeight: '600'
   }
 });

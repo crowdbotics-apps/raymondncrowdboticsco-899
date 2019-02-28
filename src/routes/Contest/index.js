@@ -22,12 +22,16 @@ class ContestScreen extends Component {
       selectedTab: 0,
       campaigns: [],
       answers: [],
-      completeness: []
+      completeness: [],
+      campaignsData: [],
+      answersData: [],
+      completenessData: []
     };
   }
 
   async componentDidMount() {
     let campaigns = await CampaignController.getCampaigns();
+
     this.setState({ campaigns }, async () => {
       await this.reload();
     });
@@ -63,8 +67,36 @@ class ContestScreen extends Component {
       });
       completeness.push(count / Object.keys(answers).length);
     });
-    this.setState({ completeness, answers: answersData });
+
+    this.setState(
+      {
+        completeness,
+        answers: answersData
+      },
+      () => {
+        this.filter();
+      }
+    );
     this.context.hideLoading();
+  };
+
+  filter = () => {
+    let { campaigns, answers, completeness, selectedTab } = this.state;
+    let selCampaignsData = [],
+      selAnswersData = [],
+      selCompletenessData = [];
+    campaigns.map((campaign, index) => {
+      if (selectedTab === 0 && completeness[index]) return;
+      selCampaignsData.push(campaign);
+      selAnswersData.push(answers[index]);
+      selCompletenessData.push(completeness[index]);
+      return;
+    });
+    this.setState({
+      campaignsData: selCampaignsData,
+      answersData: selAnswersData,
+      completenessData: selCompletenessData
+    });
   };
 
   leftHandler = () => {
@@ -72,7 +104,9 @@ class ContestScreen extends Component {
   };
 
   handleTabChange = index => {
-    this.setState({ selectedTab: index });
+    this.setState({ selectedTab: index }, () => {
+      this.filter();
+    });
   };
 
   handleCampaignPress = campaign => () => {
@@ -80,7 +114,6 @@ class ContestScreen extends Component {
   };
 
   renderCampaign = ({ item, index }) => {
-    if (this.state.selectedTab === 0 && this.state.completeness[index]) return;
     return (
       <View style={styles.item}>
         <Text style={styles.item_name}>{item.name}</Text>
@@ -89,28 +122,28 @@ class ContestScreen extends Component {
           <FastImage
             source={{ uri: item.logo }}
             style={styles.item_logo}
-            resizeMode={FastImage.resizeMode.contain}
+            resizeMode={FastImage.resizeMode.cover}
           />
         ) : (
           <Image source={NoLogoImage} style={styles.item_logo} resizeMode="cover" />
         )}
         <Progress.Bar
-          progress={this.state.completeness[index]}
+          progress={this.state.completenessData[index]}
           width={dm.width / 2 - 30}
           height={10}
           color="#81A8D2"
           borderColor="#81A8D2"
         />
         <Text style={styles.item_point}>
-          {this.state.answers[index]
-            ? `${this.state.answers[index].reward} / ${item.total_points} pts`
-            : `0 / ${item.total_points} pts`}
+          {this.state.answersData[index]
+            ? `${this.state.answersData[index].reward} / ${item.total_points} points`
+            : `0 / ${item.total_points} points`}
         </Text>
         <Button
           containerStyle={styles.item_button}
           text={
-            this.state.answers[index]
-              ? this.state.answers[index].complete
+            this.state.answersData[index]
+              ? this.state.answersData[index].complete
                 ? 'Completed'
                 : 'Proceed'
               : 'Proceed'
@@ -137,7 +170,7 @@ class ContestScreen extends Component {
         <FlatList
           style={styles.list}
           numColumns={2}
-          data={this.state.campaigns}
+          data={this.state.campaignsData}
           keyExtractor={item => item.id}
           renderItem={this.renderCampaign}
           extraData={this.state}

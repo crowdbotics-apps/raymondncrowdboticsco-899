@@ -153,7 +153,7 @@ class ContestDetailsScreen extends React.Component {
     return (
       <View key={`${index}`} style={styles.questionItem}>
         <Text style={styles.qLabel}>
-          {index + 1}. <Text style={styles.qQuestionDetails}>{question.question}</Text>
+          <Text style={styles.qQuestionDetails}>{question.question}</Text>
         </Text>
         {question.media_type &&
           (question.media_type.includes('image/') ? (
