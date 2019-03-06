@@ -6,10 +6,12 @@ export default StyleSheet.create({
   container: {
     flex: 1
   },
-  scrollContent: {
+  scrollContainer: {
     flex: 1
   },
   content: {
+    flex: 1,
+    alignItems: 'flex-start',
     padding: 20
   },
   title: {

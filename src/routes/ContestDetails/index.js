@@ -5,6 +5,7 @@ import FastImage from 'react-native-fast-image';
 import Video from 'react-native-video';
 import { CheckBox } from 'react-native-elements';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import moment from 'moment';
 
 import { AppContext, Navbar, Button } from 'app/components';
@@ -226,7 +227,7 @@ class ContestDetailsScreen extends React.Component {
       <View style={styles.container}>
         <Navbar left="ios-arrow-back" leftHandler={this.leftHandler} title="Answers" />
         {data && (
-          <ScrollView style={styles.scrollContent}>
+          <KeyboardAwareScrollView style={styles.scrollContainer}>
             <View style={styles.content}>
               <Text style={styles.title}>{data.name}</Text>
               <FastImage
@@ -256,7 +257,7 @@ class ContestDetailsScreen extends React.Component {
                 />
               )}
             </View>
-          </ScrollView>
+          </KeyboardAwareScrollView>
         )}
       </View>
     );
